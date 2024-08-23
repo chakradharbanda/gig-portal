@@ -12,6 +12,7 @@ import { db } from "../firebaseConfig"; // Adjust the path to your firebaseConfi
 import {
   Typography,
   Card,
+  Container,
   CardContent,
   Table,
   TableBody,
@@ -136,6 +137,7 @@ const AdminProjectApproval = () => {
 
       // Update the project status to 'closed'
       const projectDocRef = doc(db, "projects", projectId);
+      debugger;
       await updateDoc(projectDocRef, { status: "closed" });
 
       // Reject all other applications for the same project
@@ -171,10 +173,30 @@ const AdminProjectApproval = () => {
   if (loading) return <p>Loading applications...</p>;
 
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>
+    <Container
+      id="testimonials"
+      sx={{
+        pt: { xs: 4, sm: 12 },
+        pb: { xs: 8, sm: 16 },
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: { xs: 3, sm: 6 },
+      }}
+    >
+      <Box
+        sx={{
+          width: { sm: "100%", md: "60%" },
+          textAlign: { sm: "left", md: "center" },
+        }}
+      >
+        <Typography component="h2" variant="h4" color="text.primary">
+          
         Approve Applications for Projects
-      </Typography>
+        </Typography>
+      </Box>
+      <Box sx={{ width: '100%' }}>
       {projects.length === 0 ? (
         <Typography variant="body1">No pending applications.</Typography>
       ) : (
@@ -204,34 +226,6 @@ const AdminProjectApproval = () => {
                       <TableRow key={application.id}>
                         <TableCell>
                           {application.userId}
-
-                          <Tooltip title="Account settings">
-                            <IconButton
-                              onClick={handleClick}
-                              size="small"
-                              sx={{ ml: 2 }}
-                              aria-controls={open ? "account-menu" : undefined}
-                              aria-haspopup="true"
-                              aria-expanded={open ? "true" : undefined}
-                            >
-                              <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-                            </IconButton>
-                            <Dialog
-                              open={open}
-                              onClose={handleClose}
-                              PaperProps={{
-                                style: { boxShadow: "none" }, // Customize dialog paper
-                              }}
-                              BackdropProps={{
-                                style: { backgroundColor: 'rgba(0, 0, 0, 0.7)' }, // Make the backdrop transparent
-                              }}
-                            >
-                              <DialogTitle>User Profile</DialogTitle>
-                              <DialogContent>
-                                <UserProfile user={application.user} />
-                              </DialogContent>
-                            </Dialog>
-                          </Tooltip>
                         </TableCell>
                         <TableCell>
                           {application.user.skills.join(", ")}
@@ -257,7 +251,8 @@ const AdminProjectApproval = () => {
           </Card>
         ))
       )}
-    </div>
+      </Box>
+    </Container>
   );
 };
 

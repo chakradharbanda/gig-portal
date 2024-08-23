@@ -9,8 +9,17 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
-import { List, ListItem, Typography, Badge, Chip, Grid } from '@mui/material';
-import { CheckCircleOutline, HourglassEmpty } from '@mui/icons-material';
+import {
+  List,
+  ListItem,
+  Typography,
+  Badge,
+  Chip,
+  Grid,
+  Box,
+  Container,
+} from "@mui/material";
+import { CheckCircleOutline, HourglassEmpty } from "@mui/icons-material";
 
 function MyApplications() {
   const [applications, setApplications] = useState([]);
@@ -68,53 +77,75 @@ function MyApplications() {
   };
 
   return (
-    <List>
-      {applications.map((app) => (
-        <ListItem
-          key={app.id}
-          sx={{
-            marginBottom: 2,
-            padding: 2,
-            border: "1px solid #ddd",
-            borderRadius: 2,
-          }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={8}>
-              <Typography variant="h6">
-                {app.project?.title}{" "}
-                <Badge badgeContent={getStatusBadge(app.status)} />
-              </Typography>
+    <Container
+      id="testimonials"
+      sx={{
+        pt: { xs: 4, sm: 12 },
+        pb: { xs: 8, sm: 16 },
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: { xs: 3, sm: 6 },
+      }}
+    >
+      <Box
+        sx={{
+          width: { sm: "100%", md: "60%" },
+          textAlign: { sm: "left", md: "center" },
+        }}
+      >
+        <Typography component="h2" variant="h4" color="text.primary">
+          My Applications
+        </Typography>
+      </Box>
+      <List>
+        {applications.map((app) => (
+          <ListItem
+            key={app.id}
+            sx={{
+              marginBottom: 2,
+              padding: 2,
+              border: "1px solid #ddd",
+              borderRadius: 2,
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={11}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Typography variant="h6">{app.project?.title}</Typography>
+                  <Badge badgeContent={getStatusBadge(app.status)} />
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body1">
+                  {app.project?.description}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2" color="textSecondary">
+                  <strong>Domain:</strong> {app.project?.domain}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  <strong>Client:</strong> {app.project?.client}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  <strong>Duration:</strong> {app.project?.duration}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  <strong>Skills Required:</strong>{" "}
+                  {app.project?.skillsRequired.join(", ")}
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <Typography variant="subtitle1" color="textSecondary">
-                Status: {app.status}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1">
-                {app.project?.description}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body2" color="textSecondary">
-                <strong>Domain:</strong> {app.project?.domain}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                <strong>Client:</strong> {app.project?.client}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                <strong>Duration:</strong> {app.project?.duration}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                <strong>Skills Required:</strong>{" "}
-                {app.project?.skillsRequired.join(", ")}
-              </Typography>
-            </Grid>
-          </Grid>
-        </ListItem>
-      ))}
-    </List>
+          </ListItem>
+        ))}
+      </List>
+    </Container>
   );
 }
 

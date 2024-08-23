@@ -16,7 +16,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import StyleIcon from "@mui/icons-material/Style";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import { Link } from "react-router-dom";
 
 const logoStyle = {
   width: "50px",
@@ -88,9 +89,15 @@ function AppAppBar({ mode, toggleColorMode }) {
                 px: 0,
               }}
             >
-              <img src={`${process.env.PUBLIC_URL}/hyper.png`} style={logoStyle} alt="logo of sitemark" />
+              <img
+                src={`${process.env.PUBLIC_URL}/hyper.png`}
+                style={logoStyle}
+                alt="logo of sitemark"
+              />
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <MenuItem
+                  component={Link}
+                  to="/projects"
                   onClick={() => scrollToSection("hero")}
                   sx={{ py: 1, px: 2 }}
                 >
@@ -100,6 +107,8 @@ function AppAppBar({ mode, toggleColorMode }) {
                   </Typography>
                 </MenuItem>
                 <MenuItem
+                  component={Link}
+                  to="/my-applications" // Link to the desired path
                   onClick={() => scrollToSection("logoCollection")}
                   sx={{ py: 1, px: 2 }}
                 >
@@ -171,25 +180,25 @@ function AppAppBar({ mode, toggleColorMode }) {
                       toggleColorMode={toggleColorMode}
                     />
                     <Button
-                color="primary"
-                variant="text"
-                size="small"
-                component="a"
-                href="/material-ui/getting-started/templates/sign-in/"
-                target="_blank"
-              >
-                User
-              </Button>
-              <Button
-                color="primary"
-                variant="contained"
-                size="small"
-                component="a"
-                href="/material-ui/getting-started/templates/sign-up/"
-                target="_blank"
-              >
-                Admin
-              </Button>
+                      color="primary"
+                      variant="text"
+                      size="small"
+                      component="a"
+                      href="/material-ui/getting-started/templates/sign-in/"
+                      target="_blank"
+                    >
+                      User
+                    </Button>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      size="small"
+                      component="a"
+                      href="/material-ui/getting-started/templates/sign-up/"
+                      target="_blank"
+                    >
+                      Admin
+                    </Button>
                   </Box>
                   <MenuItem onClick={() => scrollToSection("hero")}>
                     <PersonIcon color="primary" sx={{ mr: 1 }} />

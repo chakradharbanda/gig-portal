@@ -11,6 +11,8 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/system";
+import { TextField, Button, Stack, CardActions } from "@mui/material";
+import ProjectDetailsDialog from "./ProjectDetailsDialog";
 
 function Projects() {
   const [projects, setProjects] = useState([]);
@@ -55,9 +57,22 @@ function Projects() {
     setSearchFilters({ ...searchFilters, skillsRequired: skills });
   };
 
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleCardClick = (project) => {
+    setSelectedProject(project);
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+    setSelectedProject(null);
+  };
+
   return (
     <div>
-            <Container
+      <Container
         id="testimonials"
         sx={{
           pt: { xs: 4, sm: 12 },
@@ -76,44 +91,40 @@ function Projects() {
           }}
         >
           <Typography component="h2" variant="h4" color="text.primary">
-          Projects
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            See what our customers love about our products. Discover how we
-            excel in efficiency, durability, and satisfaction. Join us for
-            quality, innovation, and reliable support.
+            Projects
           </Typography>
         </Box>
-        
-
-      <div>
-        <h3>Search Projects</h3>
-        <input
-          type="text"
-          name="skillsRequired"
-          placeholder="Skills (comma separated)"
-          onChange={handleSkillsChange}
-        />
-        <input
-          type="text"
-          name="domain"
-          placeholder="Domain"
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          name="client"
-          placeholder="Client"
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          name="duration"
-          placeholder="Duration"
-          onChange={handleInputChange}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
+        <Box sx={{ padding: 3, maxWidth: 900, margin: "auto" }}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <TextField
+              label="Skills (comma separated)"
+              variant="outlined"
+              name="skillsRequired"
+              onChange={handleSkillsChange}
+            />
+            <TextField
+              label="Domain"
+              variant="outlined"
+              name="domain"
+              onChange={handleInputChange}
+            />
+            <TextField
+              label="Client"
+              variant="outlined"
+              name="client"
+              onChange={handleInputChange}
+            />
+            <TextField
+              label="Duration"
+              variant="outlined"
+              name="duration"
+              onChange={handleInputChange}
+            />
+            <Button variant="contained" color="primary" onClick={handleSearch}>
+              Search
+            </Button>
+          </Stack>
+        </Box>
 
         <Grid container spacing={2}>
           {projects.map((project, index) => (
@@ -144,6 +155,11 @@ function Projects() {
                     <Link to={`/project/${project.id}`}>View Details</Link>
                   </Typography>
                 </CardContent>
+                <CardActions>
+            <Button size="small" color="primary" onClick={() => handleCardClick(project)}>
+              View Details
+            </Button>
+          </CardActions>
                 <Box
                   sx={{
                     display: "flex",
@@ -162,6 +178,15 @@ function Projects() {
           ))}
         </Grid>
       </Container>
+      {/* Project Details Dialog */}
+      {selectedProject && (
+        <ProjectDetailsDialog
+          open={dialogOpen}
+          handleClose={handleDialogClose}
+          project={selectedProject}
+          projectId={selectedProject.id}
+        />
+      )}
     </div>
   );
 }
