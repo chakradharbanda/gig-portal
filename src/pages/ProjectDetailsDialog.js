@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { addDoc, collection } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import {
   Dialog,
@@ -21,9 +21,40 @@ const ProjectDetailsDialog = ({
   const [application, setApplication] = useState({
     userId: user.userId,
   });
+  const [hasApplied, setHasApplied] = useState(false);
+
+  useEffect(() => {
+    const checkIfApplied = async () => {
+      try {
+        const q = query(
+          collection(db, "applications"),
+          where("userId", "==", user.userId),
+          where("projectId", "==", projectId)
+        );
+
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          setHasApplied(true); // User has already applied to this project
+        } else {
+          setHasApplied(false);
+        }
+      } catch (error) {
+        console.error("Error checking existing applications:", error);
+      }
+    };
+
+    if (open && projectId && user.userId) {
+      checkIfApplied();
+    }
+  }, [open, projectId, user.userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (hasApplied) {
+      alert("You have already applied for this project.");
+      return;
+    }
 
     try {
       const applicationsRef = collection(db, "applications");
@@ -41,6 +72,7 @@ const ProjectDetailsDialog = ({
       alert("Error submitting application");
     }
   };
+
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>{project?.title || "Project Details"}</DialogTitle>
@@ -78,8 +110,13 @@ const ProjectDetailsDialog = ({
           Close
         </Button>
         {!readOnly && (
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Apply
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            disabled={hasApplied}
+          >
+            {hasApplied ? "Already Applied" : "Apply"}
           </Button>
         )}
       </DialogActions>
