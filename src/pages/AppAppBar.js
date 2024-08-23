@@ -25,7 +25,7 @@ const logoStyle = {
   cursor: "pointer",
 };
 
-function AppAppBar({ mode, toggleColorMode }) {
+function AppAppBar({ mode, toggleColorMode, isAdmin }) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
@@ -95,28 +95,39 @@ function AppAppBar({ mode, toggleColorMode }) {
                 alt="logo of sitemark"
               />
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              {!isAdmin ? (
+                <><MenuItem
+                    component={Link}
+                    to="/projects"
+                    onClick={() => scrollToSection("hero")}
+                    sx={{ py: 1, px: 2 }}
+                  >
+                    <PersonIcon color="primary" sx={{ mr: 1 }} />
+                    <Typography variant="body2" color="text.primary">
+                      Projects
+                    </Typography>
+                  </MenuItem><MenuItem
+                    component={Link}
+                    to="/my-applications" // Link to the desired path
+                    onClick={() => scrollToSection("logoCollection")}
+                    sx={{ py: 1, px: 2 }}
+                  >
+                      <StyleIcon color="primary" sx={{ mr: 1 }} />
+                      <Typography variant="body2" color="text.primary">
+                        My Applications
+                      </Typography>
+                    </MenuItem></>):(
                 <MenuItem
                   component={Link}
-                  to="/projects"
-                  onClick={() => scrollToSection("hero")}
-                  sx={{ py: 1, px: 2 }}
-                >
-                  <PersonIcon color="primary" sx={{ mr: 1 }} />
-                  <Typography variant="body2" color="text.primary">
-                    Projects
-                  </Typography>
-                </MenuItem>
-                <MenuItem
-                  component={Link}
-                  to="/my-applications" // Link to the desired path
+                  to="/admin" // Link to the desired path
                   onClick={() => scrollToSection("logoCollection")}
                   sx={{ py: 1, px: 2 }}
                 >
                   <StyleIcon color="primary" sx={{ mr: 1 }} />
                   <Typography variant="body2" color="text.primary">
-                    My Applications
+                    Approve Applications
                   </Typography>
-                </MenuItem>
+                </MenuItem>)}
               </Box>
             </Box>
             <Box
@@ -127,26 +138,28 @@ function AppAppBar({ mode, toggleColorMode }) {
               }}
             >
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-              <Button
-                color="primary"
-                variant="text"
-                size="small"
-                component="a"
-                href="/material-ui/getting-started/templates/sign-in/"
-                target="_blank"
-              >
-                User
-              </Button>
-              <Button
-                color="primary"
-                variant="contained"
-                size="small"
-                component="a"
-                href="/material-ui/getting-started/templates/sign-up/"
-                target="_blank"
-              >
-                Admin
-              </Button>
+
+              {isAdmin ? (
+                <Button
+                  color="primary"
+                  variant="text"
+                  size="small"
+                  component="a"
+                  target="_blank"
+                >
+                  Admin
+                </Button>
+              ) : (
+                <Button
+                  color="primary"
+                  variant="contained"
+                  size="small"
+                  component="a"
+                  target="_blank"
+                >
+                  User
+                </Button>
+              )}
             </Box>
             <Box sx={{ display: { sm: "", md: "none" } }}>
               <Button
@@ -179,26 +192,29 @@ function AppAppBar({ mode, toggleColorMode }) {
                       mode={mode}
                       toggleColorMode={toggleColorMode}
                     />
-                    <Button
-                      color="primary"
-                      variant="text"
-                      size="small"
-                      component="a"
-                      href="/material-ui/getting-started/templates/sign-in/"
-                      target="_blank"
-                    >
-                      User
-                    </Button>
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      size="small"
-                      component="a"
-                      href="/material-ui/getting-started/templates/sign-up/"
-                      target="_blank"
-                    >
-                      Admin
-                    </Button>
+                    {isAdmin ? (
+                      <Button
+                        color="primary"
+                        variant="text"
+                        size="small"
+                        component="a"
+                        href="/material-ui/getting-started/templates/sign-in/"
+                        target="_blank"
+                      >
+                        Admin
+                      </Button>
+                    ) : (
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        size="small"
+                        component="a"
+                        href="/material-ui/getting-started/templates/sign-up/"
+                        target="_blank"
+                      >
+                        User
+                      </Button>
+                    )}
                   </Box>
                   <MenuItem onClick={() => scrollToSection("hero")}>
                     <PersonIcon color="primary" sx={{ mr: 1 }} />

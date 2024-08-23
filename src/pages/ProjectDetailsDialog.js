@@ -1,7 +1,6 @@
-
-import React, { useState } from 'react';
-import { addDoc, collection } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import React, { useState } from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 import {
   Dialog,
   DialogTitle,
@@ -9,36 +8,42 @@ import {
   DialogActions,
   Button,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-const ProjectDetailsDialog = ({ open, handleClose, project, projectId }) => {
-
+const ProjectDetailsDialog = ({
+  open,
+  handleClose,
+  project,
+  projectId,
+  readOnly,
+  user,
+}) => {
   const [application, setApplication] = useState({
-    userId: 'unique-user-id-3'
+    userId: user.userId,
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const applicationsRef = collection(db, 'applications');
+      const applicationsRef = collection(db, "applications");
       await addDoc(applicationsRef, {
         projectId,
         ...application,
-        status: 'pending', // or 'submitted' based on your requirements
+        status: "pending", // or 'submitted' based on your requirements
         createdAt: new Date(),
         // Add any additional fields you need here, e.g., user info, etc.
       });
-      alert('Application submitted successfully');
+      alert("Application submitted successfully");
       handleClose(); // Close the dialog after successful submission
     } catch (error) {
-      console.error('Error submitting application:', error);
-      alert('Error submitting application');
+      console.error("Error submitting application:", error);
+      alert("Error submitting application");
     }
   };
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{project?.title || 'Project Details'}</DialogTitle>
+      <DialogTitle>{project?.title || "Project Details"}</DialogTitle>
       <DialogContent dividers>
         {project ? (
           <>
@@ -58,7 +63,10 @@ const ProjectDetailsDialog = ({ open, handleClose, project, projectId }) => {
               Status: {project.status}
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              Skills Required: {project.skillsRequired.join(', ')}
+              Skills Required: {project.skillsRequired.join(", ")}
+            </Typography>
+            <Typography variant="body1" color="textPrimary">
+              Applying for {user.name}
             </Typography>
           </>
         ) : (
@@ -69,9 +77,11 @@ const ProjectDetailsDialog = ({ open, handleClose, project, projectId }) => {
         <Button onClick={handleClose} color="primary">
           Close
         </Button>
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
-          Apply
-        </Button>
+        {!readOnly && (
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            Apply
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

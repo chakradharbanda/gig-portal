@@ -14,7 +14,7 @@ import { useTheme } from "@mui/system";
 import { TextField, Button, Stack, CardActions } from "@mui/material";
 import ProjectDetailsDialog from "./ProjectDetailsDialog";
 
-function Projects() {
+function Projects({ user = { userId: "unique-user-id-3" } }) {
   const [projects, setProjects] = useState([]);
   const [searchFilters, setSearchFilters] = useState({
     skillsRequired: [],
@@ -156,10 +156,14 @@ function Projects() {
                   </Typography>
                 </CardContent>
                 <CardActions>
-            <Button size="small" color="primary" onClick={() => handleCardClick(project)}>
-              View Details
-            </Button>
-          </CardActions>
+                  <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => handleCardClick(project)}
+                  >
+                    View Details
+                  </Button>
+                </CardActions>
                 <Box
                   sx={{
                     display: "flex",
@@ -185,6 +189,7 @@ function Projects() {
           handleClose={handleDialogClose}
           project={selectedProject}
           projectId={selectedProject.id}
+          user={user}
         />
       )}
     </div>

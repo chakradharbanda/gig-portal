@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import { CheckCircleOutline, HourglassEmpty } from "@mui/icons-material";
 
-function MyApplications() {
+function MyApplications({ user }) {
   const [applications, setApplications] = useState([]);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ function MyApplications() {
       try {
         const q = query(
           collection(db, "applications"),
-          where("userId", "==", "unique-user-id-3") // Replace with actual user ID
+          where("userId", "==", user.userId) // Replace with actual user ID
         );
 
         const querySnapshot = await getDocs(q);
